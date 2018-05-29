@@ -1,8 +1,17 @@
 var router=require('express').Router()
 var Playlists=require('../models/playlist')
 
-// GET ALL PLAYLISTS
-router.get('/api/playlists',(req,res,next)=>{
+// GET PLAYLIST BY ID OR ALL
+router.get('/api/playlists/:id?',(req,res)=>{
+  if(req.params.id){
+    Playlists.findById(req.params.id)
+      .then(playlist=>{
+        return res.status(200).send(playlist)
+      })
+      .catch(err=>{
+        res.status(400).send(err)
+      })
+  }
   Playlists.find(req.query)
     .then(playlists=>{
       res.status(200).send(playlists)
@@ -12,19 +21,8 @@ router.get('/api/playlists',(req,res,next)=>{
     })
 })
 
-// GET PLAYLIST BY ID
-router.get('/api/playlists/:id',(req,res,next)=>{
-  Playlists.findById(req.params.id)
-    .then(playlist=>{
-      res.status(200).send(playlist)
-    })
-    .catch(err=>{
-      res.status(400).send(err)
-    })
-})
-
 // CREATE PLAYLIST
-router.post('/api/playlists',(req,res,next)=>{
+router.post('/api/playlists',(req,res)=>{
   var playlist=req.body
   Playlists.create(playlist)
     .then(newPlaylist=>{
@@ -35,17 +33,18 @@ router.post('/api/playlists',(req,res,next)=>{
     })
 })
 
-router.post('/api/playlists/:_id',(req,res,next)=>{
-  Playlists.findByIdAndUpdate(req.params._id, req.body).then(list=>{
+// EDIT PLAYLIST - REPLACE ENTIRE SONG ARRAY
+router.put('/api/playlists/:id',(req,res)=>{
+  Playlists.findByIdAndUpdate(req.params.id, req.body, {new:true}).then(list=>{
     res.send(list)
   })
 })
 
-// EDIT PLAYLIST
-router.put('/api/playlists/:_id/songs', (req,res,next)=>{
-  Playlists.findById(req.params._id)
-    .then(playlist=>{
-      playlist.songs.$addToSet(req.body)
+// EDIT PLAYLIST - ADD ONE SONG
+router.put('/api/playlists/:id/songs', (req,res)=>{
+  Playlists.findById(req.params.id)
+    .then(function(playlist){
+      playlist.songs.addToSet(req.body)
       playlist.save()
         .then(()=>{
           console.log("Successfully Updated ", playlist)
@@ -58,7 +57,7 @@ router.put('/api/playlists/:_id/songs', (req,res,next)=>{
 })
 
 // DELETE PLAYLIST
-router.delete('/api/playlists/:id', (req,res,next)=>{
+router.delete('/api/playlists/:id', (req,res)=>{
   Playlists.findByIdAndRemove(req.params.id)
     .then(data=>{
       res.send("Successfully Deleted Playlist")

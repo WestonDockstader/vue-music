@@ -21,6 +21,7 @@
             <form v-if="addPlayForm" v-on:submit.prevent="createPlaylist">
               <input type="text" v-model="list.title">
               <button @click="addPlayForm=false" type="submit">Submit</button>
+              <button @click="addPlayForm=false">Cancel</button>
             </form>
             <div v-if="playlists">
               <ol>

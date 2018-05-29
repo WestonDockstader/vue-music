@@ -1,14 +1,15 @@
 <template>
   <div class="container-fluid">
     <h1>{{list.title}}</h1>
-    <draggable v-model="mylist" v-on:change="updateList(mylist)">
-            <div v-for="(song,index) in list" :key="index" class="dis-card">
+    <draggable v-model="songs" v-on:change="updateList">
+            <div v-for="(song,index) in songs" :key="song._id" class="dis-card">
               <img :src="song.albumArt" alt="" class="img-class">
               <div>
                 <h3 class="song-info"><strong>{{song.title}}</strong></h3>
                 <p class="song-info"><strong>{{song.artist}}</strong></p>
               <p class="song-info">Album: {{song.album}} Price: {{song.price}}</p>
-              <button @click="handleButtonClick(song)">{{buttonText}}</button>
+              <button @click="handleButtonClick(index)">{{buttonText}}</button>
+              
             </div>
               <audio controls>
                 <source :src="song.preview">
@@ -22,6 +23,19 @@
   import draggable from 'vuedraggable';
   export default {
     name: 'tracks-list',
+    mounted(){
+      this.songs = this.$store.state.activeList.songs
+    },
+    data(){
+      return{
+        songs:[]
+      }
+    },
+    computed:{
+      activeList(){
+        return this.$store.state.activeList
+      }
+    },
     props: {
       list: {
         type: Array,
@@ -44,22 +58,14 @@
     components: {
       draggable
     },
-    computed:{
-      mylist:{
-        get(){
-          return this.$store.state.activeList.songs
-        },
-        set(value){
-          this.$store.commit('updateList',value)
-        }
-      }
-    },
-  methods:{
-    updateList(payload){
-      console.log(payload)
-      this.$store.dispatch('addToPlayList',payload)
-    }  
-  }
+    methods:{
+      updateList(){
+        this.activeList.songs=this.songs
+        var update = this.activeList
+        console.log(update) 
+        this.$store.dispatch('updatePlaylist',update)
+      }  
+    }
   }
 </script>
 

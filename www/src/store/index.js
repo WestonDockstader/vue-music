@@ -65,6 +65,7 @@ export default new vuex.Store({
           })
           commit('setSearchResults',songList)
         })
+        .catch(err => dispatch('showNotification', err))
     },
     getPlaylists({dispatch,commit}){
       api.get('/playlists')
@@ -79,23 +80,30 @@ export default new vuex.Store({
         })
     },
     addToPlayList({dispatch,commit},payload){
-      api.post("/playlists/"+payload._id,payload)
+      api.put("/playlists/"+payload._id+"/songs",payload)
         .then(res=>{
           console.log(res.data)
           dispatch('getPlaylists')
         })
+    },
+    updatePlaylist({dispatch,commit},payload){
+      api.post("/playlists/"+payload._id,payload)
+      .then(res=>{
+        dispatch('getPlaylists')
+      })
+    },
+    removeFromPlaylist({dispatch,commit,state},payload){
+      state.activeList.songs.splice(payload,1)
+      api.post('/playlists/'+state.activeList._id, state.activeList)
+      .then(res=>{
+        dispatch('getPlaylists')
+      })
     },
     deletePlaylist({dispatch,commit},payload){
       api.delete('/playlists/'+payload._id,payload)  
       .then(res=>{
           dispatch('getPlaylists')
         })
-    },
-    updatePlaylist({dispatch,commit},payload){
-      api.post("/playlists/"+payload.id,payload)
-        .then(res=>{
-          dispatch('getPlaylists')
-        })
-    },
+    }
   }
 })
