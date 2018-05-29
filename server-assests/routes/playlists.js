@@ -38,6 +38,9 @@ router.put('/api/playlists/:id',(req,res)=>{
   Playlists.findByIdAndUpdate(req.params.id, req.body, {new:true}).then(list=>{
     res.send(list)
   })
+  .catch(err=>{
+    res.status(400).send({message: "No Editing for you!!!"})
+  })
 })
 
 // EDIT PLAYLIST - ADD ONE SONG
