@@ -4,7 +4,7 @@
     <div class="searchbar">
       <form @submit.prevent="search">
         <input type="text" v-model="query" placeholder="Artist Name">
-        <button type="submit">Search</button>
+        <button class="btn" type="submit">Search</button>
       </form>
       <hr>
     </div>
@@ -17,29 +17,28 @@
       <div class="playlists">
         <div class="row">
           <div v-if="changeDisplay">
-            <button @click="addPlayForm=true">Create Playlist</button>
+            <button style="margin-bottom:1rem;" @click="addPlayForm=true">Create Playlist</button>
             <form v-if="addPlayForm" v-on:submit.prevent="createPlaylist">
               <input type="text" v-model="list.title">
-              <button @click="addPlayForm=false" type="submit">Submit</button>
-              <button @click="addPlayForm=false">Cancel</button>
+              <button class="btn" @click="addPlayForm=false" type="submit">Submit</button>
+              <button class="btn" @click="addPlayForm=false">Cancel</button>
             </form>
             <div v-if="playlists">
-              <ol>
-                <li v-for="playlist in playlists">
-                  <h3>{{playlist.title}}</h3>
-                  <img src="http://placehold.it/100x100">
-                  <p>{{playlist.songs.length}} tracks</p>
-                  <button @click="deletePlaylist(playlist)">Delete</button>
-                  <button @click="setActiveList(playlist)">CurrentList</button>
-                  <button @click="changeDisplay=false, setActiveList(playlist)">Open Playlist</button>
-                </li>
-              </ol>
+              <div class="playlist-card" v-for="playlist in playlists">
+                <h2 style="padding-top:1.5rem;">{{playlist.title}}</h2>
+                <p>{{playlist.songs.length}} tracks</p>
+                <div style="padding-bottom:1rem;">
+                  <button class="btn" @click="deletePlaylist(playlist)">Delete</button>
+                  <button class="btn" @click="setActiveList(playlist)">Active List</button>
+                  <button class="btn" @click="changeDisplay=false, setActiveList(playlist)">Open Playlist</button>
+                </div>
+              </div>
             </div>
           </div>
           <div v-if="!changeDisplay">
             <button @click="changeDisplay=true">Back to Playlists</button>
             <h2>{{activeList.title}}</h2>
-            <ptracks :list="activeList.songs" button-text="Remove From Playlist" :handle-button-click="removeFromPlayList"></ptracks> 
+            <ptracks :list="activeList.songs" button-text="Remove From Playlist" :handle-button-click="removeFromPlayList"></ptracks>
           </div>
         </div>
       </div>
@@ -77,7 +76,7 @@
       playlists() {
         return this.$store.state.playlists;
       },
-      activeList(){
+      activeList() {
         return this.$store.state.activeList;
       }
     },
@@ -98,9 +97,9 @@
         this.$store.dispatch('deletePlaylist', list)
       },
       setActiveList(list) {
-        this.$store.commit('setActiveList',list)
+        this.$store.commit('setActiveList', list)
       },
-      removeFromPlayList(payload){
+      removeFromPlayList(payload) {
         this.$store.dispatch('removeFromPlaylist', payload)
       }
     }
@@ -113,12 +112,18 @@
     display: grid;
     grid-template-areas: "results playlists"
   }
-
   .results {
     grid-area: results
   }
-
   .playlists {
     grid-area: playlists
+  }
+  .playlist-card{
+    border-radius: 15px;
+    background-color: rgba(94, 138, 90, 0.4);
+    text-align:center;
+  }
+  .btn:hover{
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.3)
   }
 </style>

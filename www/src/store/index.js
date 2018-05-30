@@ -82,7 +82,6 @@ export default new vuex.Store({
     addToPlayList({dispatch,commit},payload){
       api.put("/playlists/"+payload._id,payload)
         .then(res=>{
-          console.log(res.data)
           dispatch('getPlaylists')
         })
     },

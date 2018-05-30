@@ -8,7 +8,7 @@
                 <h3 class="song-info"><strong>{{song.title}}</strong></h3>
                 <p class="song-info"><strong>{{song.artist}}</strong></p>
               <p class="song-info">Album: {{song.album}} Price: {{song.price}}</p>
-              <button @click="handleButtonClick(index)">{{buttonText}}</button>
+              <button class="btn" @click="handleButtonClick(index)">{{buttonText}}</button>
               
             </div>
               <audio controls>
@@ -62,7 +62,6 @@
       updateList(){
         this.activeList.songs=this.songs
         var update = this.activeList
-        console.log(update) 
         this.$store.dispatch('updatePlaylist',update)
       }  
     }

@@ -6,7 +6,7 @@
         <h3 class="song-info"><strong>{{song.title}}</strong></h3>
         <p class="song-info"><strong>{{song.artist}}</strong></p>
       <p class="song-info">Album: {{song.album}} Price: {{song.price}}</p>
-      <button @click="handleButtonClick(song)">{{buttonText}}</button>
+      <button class="btn" @click="handleButtonClick(song)">{{buttonText}}</button>
     </div>
       <audio controls>
         <source :src="song.preview">
@@ -40,14 +40,16 @@
     padding-top: 0.5rem;
   }
   .dis-card{
-    background-color: rgba(100,100,100,.3);
+    border-radius: 20px;
+    background-color: rgba(107, 95, 95, 0.3);
     display: block;
     margin-bottom: 1rem;
     margin-right: 1rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3)
   }
   .img-class{
     float: left;
-    padding: 0.5rem;
+    padding: 1rem;
   }
   .song-info{
     margin: 0.3rem;
