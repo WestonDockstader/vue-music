@@ -1,11 +1,13 @@
 import vue from 'vue'
 import vuex from 'vuex'
 import axios from 'axios'
-import router from '../router'
 
-vue.use(vuex)
+var production = !window.location.host.includes('localhost');
+var baseUrl = production ? '//mytunes-vue.herokuapp.com/' : '//localhost:3000/';
+
+
 var api=axios.create({
-  baseURL:'http://localhost:3000/api',
+  baseURL:baseUrl+'api',
   timeout: 3000
 })
 
@@ -13,6 +15,7 @@ var iURL=axios.create({
   baseURL:'https://itunes.apple.com/',
   timeout: 3000
 })
+vue.use(vuex)
 
 function swapUrlSize(url, pixels){
   var sizeString=`${pixels}x${pixels}`;
