@@ -12,7 +12,7 @@ export default {
 
 <style>
   body{
-    background-image: url("../hannah-troupe-430145-unsplash.png");
+    background-image: url("../hannah-troupe-unsplash.jpg");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
