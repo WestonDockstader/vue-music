@@ -1,41 +1,47 @@
 <template>
-  <div class="header">
-    <h1>FindTunes</h1>
-    <div class="searchbar">
-      <form @submit.prevent="search">
-        <input type="text" v-model="query" placeholder="Artist Name">
-        <button class="btn" type="submit">Search</button>
-      </form>
-      <hr>
-    </div>
-
-    <div class="display-section">
-      <div class="row">
-        <h2>Search results for: {{artist}}</h2>
-        <tracks :list="results" button-text="Add to Playlist" :handle-button-click="addToPlayList"></tracks>
-      </div>
-      <div class="playlists">
-        <div class="row">
-          <div v-if="changeDisplay">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col text-center">
+        <div class="searchbar justify-content-center">
+          <h1 class="title-style">FindTunes</h1>
+          <div class="d-flex flex-row justify-content-center">
+            <form @submit.prevent="search">
+              <input type="text" v-model="query" placeholder="Artist Name">
+              <button class="btn mr-3" type="submit">Search</button>
+            </form>
             <button style="margin-bottom:1rem;" @click="addPlayForm=true">Create Playlist</button>
             <form v-if="addPlayForm" v-on:submit.prevent="createPlaylist">
               <input type="text" v-model="list.title">
               <button class="btn" @click="addPlayForm=false" type="submit">Submit</button>
               <button class="btn" @click="addPlayForm=false">Cancel</button>
             </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-8 search-res">
+        <h2>Search results for: {{artist}}</h2>
+        <tracks :list="results" button-text="Add to Playlist" :handle-button-click="addToPlayList"></tracks>
+      </div>
+      <div class="col-4 playlists">
+        <div class="row text-center">
+          <div class="col-12" v-if="changeDisplay">
+            <h1>Your Playlists</h1>
             <div v-if="playlists">
-              <div class="playlist-card" v-for="playlist in playlists">
+              <div class="playlist-card pt-1 mt-3" v-for="playlist in playlists">
                 <h2 style="padding-top:1.5rem;">{{playlist.title}}</h2>
                 <p>{{playlist.songs.length}} tracks</p>
-                <div style="padding-bottom:1rem;">
+                <div class="align-self-end" style="padding-bottom:1rem;">
                   <button class="btn" @click="deletePlaylist(playlist)">Delete</button>
-                  <button class="btn" @click="setActiveList(playlist)">Active List</button>
+                  <!-- <button class="btn" @click="setActiveList(playlist)">Active List</button> -->
                   <button class="btn" @click="changeDisplay=false, setActiveList(playlist)">Open Playlist</button>
                 </div>
               </div>
             </div>
           </div>
-          <div v-if="!changeDisplay">
+          <div class="col-12" v-if="!changeDisplay">
             <button @click="changeDisplay=true">Back to Playlists</button>
             <h2>{{activeList.title}}</h2>
             <ptracks :list="activeList.songs" button-text="Remove From Playlist" :handle-button-click="removeFromPlayList"></ptracks>
@@ -70,7 +76,7 @@
       this.$store.dispatch('getPlaylists')
     },
     computed: {
-      results() {
+      results(){
         return this.$store.state.searchResults;
       },
       playlists() {
@@ -112,18 +118,30 @@
     display: grid;
     grid-template-areas: "results playlists"
   }
+
+  .title-style {
+    font-size: 5rem;
+  }
+
   .results {
     grid-area: results
   }
+
   .playlists {
     grid-area: playlists
   }
-  .playlist-card{
+
+  .playlist-card {
     border-radius: 15px;
-    background-color: rgba(94, 138, 90, 0.4);
-    text-align:center;
+    background-image: url('../../israel-palacio-459693-unsplash.png');
+    height: 250px;
+    width: 250px;
+    text-align: center;
+    text-shadow: 0 0 3px #FF0000, 0 0 5px #0000FF;
+    color: white;
   }
-  .btn:hover{
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.3)
+
+  .btn:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3)
   }
 </style>

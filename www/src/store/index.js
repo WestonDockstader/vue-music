@@ -39,7 +39,9 @@ export default new vuex.Store({
     },
     setSearchResults(state,payload){
       // vue.set(state,"searchResults", payload)
+      state.searchResults=[]
       state.searchResults=payload
+
     },
     setPlaylists(state,payload){
       state.playlists=payload
